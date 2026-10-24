@@ -1,0 +1,120 @@
+#Requires -Version 7
+<#
+  Builds a 1v1 Timer release into releases\ (git-ignored, and the local update folder for testing):
+  - 1v1timer-setup.exe, the install wizard people download (Inno Setup 6, installer\1v1Timer.iss), which carries
+    1v1Timer-win-Setup.exe, Velopack's one-click installer, and runs it into the folder chosen in the wizard;
+  - the update files (full and delta packages, releases.win.json);
+  - 1v1Timer-<version>-source.zip, the release's complete source (the GPL), from the commit it is built from;
+  - SHA256SUMS.txt, and release-notes-<version>.md: the notes with every file's SHA-256, for the release page.
+  Nothing is uploaded: publishing is a separate step (the Release build workflow, or by hand).
+
+  Signing (optional): with a code-signing certificate in Windows' certificate store, pass its thumbprint as
+  -SignThumbprint or in ONEVONETIMER_SIGN_THUMBPRINT. 1v1Timer.exe, Velopack's Update.exe and Setup, and the install
+  wizard are then signed with SHA-256 and timestamped (signtool from the Windows SDK), and the build stops if any of them
+  is not validly signed. Without one the build is unsigned. No certificate, key or password ever goes in the repository.
+#>
+param(
+    [string]$PackId = '1v1Timer',
+    [string]$Version,
+    [string]$Out = 'releases',
+    [string]$SignThumbprint = $env:ONEVONETIMER_SIGN_THUMBPRINT,
+    [string]$TimestampUrl = 'http://timestamp.digicert.com'
+)
+
+$ErrorActionPreference = 'Stop'
+$repo = Split-Path $PSScriptRoot
+$title = '1v1 Timer'
+# The source zip is made from the last commit: refuse a build that differs from it.
+if (git -C $repo status --porcelain --untracked-files=no) { throw 'Commit your changes first: the source zip must match the build' }
+[xml]$proj = Get-Content (Join-Path $repo 'src\OneVOneTimer\OneVOneTimer.csproj')
+if (-not $Version) { $Version = $proj.Project.PropertyGroup.Version | Where-Object { $_ } | Select-Object -First 1 }
+$notes = Join-Path $repo "docs\release-notes\$Version.md"
+if (-not (Test-Path $notes)) { throw "Write the release notes first: docs\release-notes\$Version.md" }
+$out = if ([IO.Path]::IsPathRooted($Out)) { $Out } else { Join-Path $repo $Out }
+$vpk = (Get-Command vpk -ErrorAction SilentlyContinue)?.Source ?? (Join-Path $env:USERPROFILE '.dotnet\tools\vpk.exe')
+if (-not (Test-Path $vpk)) { throw 'vpk not found: dotnet tool install -g vpk --version 1.2.161' }
+
+# Signing, when a certificate is named (see above); checked before the build starts.
+$signParams = $null
+if ($SignThumbprint) {
+    $SignThumbprint = $SignThumbprint -replace '\s', ''
+    $cert = Get-ChildItem Cert:\CurrentUser\My, Cert:\LocalMachine\My | Where-Object Thumbprint -eq $SignThumbprint | Select-Object -First 1
+    if (-not $cert) { throw "No certificate with thumbprint $SignThumbprint in the CurrentUser or LocalMachine store" }
+    if (-not $cert.HasPrivateKey) { throw "The certificate $SignThumbprint has no private key on this PC" }
+    $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe" -ErrorAction SilentlyContinue |
+        Sort-Object { [version]$_.Directory.Parent.Name } -ErrorAction SilentlyContinue | Select-Object -Last 1
+    if (-not $signtool) { throw 'signtool not found: install the Windows SDK (signing tools)' }
+    $signParams = "/sha1 $SignThumbprint /fd sha256 /tr $TimestampUrl /td sha256"
+    Write-Host "Signing with $($cert.Subject) (until $($cert.NotAfter.ToString('yyyy-MM-dd')))"
+} else {
+    Write-Warning 'Unsigned build (no -SignThumbprint or ONEVONETIMER_SIGN_THUMBPRINT): Windows will name no publisher.'
+}
+
+# The program, in one folder, with .NET inside (nothing else to install).
+$stage = Join-Path $repo "dist\stage-$PackId-$Version"
+if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
+dotnet publish (Join-Path $repo 'src\OneVOneTimer') -c Release -o $stage --self-contained true "-p:Version=$Version" --nologo -v quiet
+if ($LASTEXITCODE -ne 0) { throw 'dotnet publish failed' }
+# Debug symbols are only for developers.
+Get-ChildItem $stage -File | Where-Object { $_.Extension -in '.pdb', '.xml' } | Remove-Item
+foreach ($f in 'LICENSE', 'THIRD-PARTY-NOTICES.md') { Copy-Item (Join-Path $repo $f) $stage }
+Copy-Item (Join-Path $repo 'licenses') $stage -Recurse
+$icon = Join-Path $repo '1v1-timer-icon.ico'
+
+# The installer and the update files.
+New-Item -ItemType Directory -Force $out | Out-Null
+# Velopack signs what is not signed yet (1v1Timer.exe, Update.exe, its Setup) before packing.
+$signArgs = $signParams ? @('--signParams', $signParams) : @()
+& $vpk pack --packId $PackId --packVersion $Version --packDir $stage --mainExe "$PackId.exe" --packTitle $title --packAuthors $title `
+    --icon $icon --shortcuts StartMenuRoot --releaseNotes $notes --outputDir $out @signArgs
+if ($LASTEXITCODE -ne 0) { throw 'vpk pack failed' }
+# The release page carries the Setup only: no portable zip.
+Get-ChildItem $out -Filter "$PackId-win-Portable.zip" | Remove-Item
+
+# The install wizard around Velopack's Setup: what the release page offers.
+$iscc = "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe", "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe", "$env:ProgramFiles\Inno Setup 6\ISCC.exe" |
+    Where-Object { Test-Path $_ } | Select-Object -First 1
+if (-not $iscc) { throw 'Inno Setup 6 not found: winget install JRSoftware.InnoSetup --scope user' }
+& $iscc /Qp "/DAppVersion=$Version" "/DPackId=$PackId" "/DOutDir=$out" (Join-Path $repo 'installer\1v1Timer.iss')
+if ($LASTEXITCODE -ne 0) { throw 'the install wizard did not build' }
+$wizard = Join-Path $out '1v1timer-setup.exe'
+if (-not (Test-Path $wizard)) { throw "the install wizard is not at $wizard" }
+if ($signParams) {
+    & $signtool.FullName sign $signParams.Split(' ') $wizard
+    if ($LASTEXITCODE -ne 0) { throw 'signing the install wizard failed' }
+    # 1v1Timer.exe as the update package carries it.
+    $check = Join-Path ([IO.Path]::GetTempPath()) "1v1timer-signcheck-$Version"
+    if (Test-Path $check) { Remove-Item $check -Recurse -Force }
+    New-Item -ItemType Directory $check | Out-Null
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    $package = [IO.Compression.ZipFile]::OpenRead((Join-Path $out "$PackId-$Version-full.nupkg"))
+    [IO.Compression.ZipFileExtensions]::ExtractToFile($package.GetEntry("lib/app/$PackId.exe"), (Join-Path $check "$PackId.exe"))
+    $package.Dispose()
+    foreach ($file in $wizard, (Join-Path $out "$PackId-win-Setup.exe"), (Join-Path $check "$PackId.exe")) {
+        $sign = Get-AuthenticodeSignature $file
+        if ($sign.Status -ne 'Valid' -or $sign.SignerCertificate.Thumbprint -ne $SignThumbprint) { throw "$file is not signed with the certificate ($($sign.Status))" }
+    }
+    Remove-Item $check -Recurse -Force
+    Write-Host "Signed: the install wizard, Velopack's Setup and $PackId.exe"
+}
+
+if ($PackId -eq '1v1Timer') {
+    # The GPL: this release's complete source, from the commit it was built from.
+    $source = Join-Path $out "$PackId-$Version-source.zip"
+    if (Test-Path $source) { Remove-Item $source }
+    git -C $repo archive --format=zip --prefix="$PackId-$Version-source/" -o $source HEAD
+    if ($LASTEXITCODE -ne 0) { throw 'git archive failed' }
+}
+
+# What the release page carries: the wizard, the update packages and feed, the source zip (not Velopack's inner Setup,
+# which the wizard carries).
+$released = @(Get-ChildItem $out -File | Where-Object {
+    ($_.Name -like "$PackId-*" -or $_.Name -like 'releases.*' -or $_.Name -like 'assets.*') -and $_.Name -ne "$PackId-win-Setup.exe" })
+$released | ForEach-Object { '{0,-48} {1,8:N1} MB' -f $_.Name, ($_.Length / 1MB) }
+
+# Fingerprints, so anyone can check a download (Get-FileHash <file>): a file for the page, and the notes with them.
+$sums = $released | ForEach-Object { '{0}  {1}' -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant(), $_.Name }
+Set-Content (Join-Path $out 'SHA256SUMS.txt') $sums -Encoding utf8NoBOM
+$pageNotes = Join-Path $out "release-notes-$Version.md"
+Set-Content $pageNotes ((Get-Content $notes -Raw).TrimEnd() + "`n`n## SHA-256`n`n" + '```' + "`n" + ($sums -join "`n") + "`n" + '```' + "`n") -Encoding utf8NoBOM -NoNewline
+Write-Host "SHA-256 of every file: SHA256SUMS.txt; the release page's notes with them: $pageNotes"

@@ -1,0 +1,20 @@
+name: Build
+
+# Checks on every push that the app and its tests build on Windows, and runs the tests. The release itself is built by
+# the Release build workflow (Run workflow), with tools/release.ps1.
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build the app
+        run: dotnet build src/OneVOneTimer/OneVOneTimer.csproj -c Release
+      - name: Run the tests
+        run: dotnet test tests/OneVOneTimer.Tests/OneVOneTimer.Tests.csproj -c Release

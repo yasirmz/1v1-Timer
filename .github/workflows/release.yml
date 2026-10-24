@@ -1,0 +1,103 @@
+name: Release build
+
+# Builds 1v1timer-setup.exe and the update files with tools/release.ps1 on a Windows runner, with what it needs installed
+# first (Inno Setup 6 and vpk). Run it from the Actions tab (Run workflow), or push a tag such as v1.0.0. The results
+# are the run's artifacts:
+#   1v1timer-setup     the installer people run
+#   1v1Timer-release   every file a release page carries (installer, update packages, source zip, checksums)
+# With "Publish the release" ticked (or on a tag), the same files also go up as the release v<version> (the version in
+# src/OneVOneTimer/OneVOneTimer.csproj), marked latest: the README's Download button then downloads 1v1timer-setup.exe.
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish the release (v + the version in OneVOneTimer.csproj)'
+        type: boolean
+        default: true
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      INNO_VERSION: '6.7.0'
+      VPK_VERSION: '1.2.161'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
+
+      - name: vpk (Velopack's packer)
+        run: dotnet tool install -g vpk --version $env:VPK_VERSION
+
+      - name: Inno Setup 6
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) {
+            $setup = Join-Path $env:RUNNER_TEMP 'innosetup.exe'
+            Invoke-WebRequest "https://files.jrsoftware.org/is/6/innosetup-$env:INNO_VERSION.exe" -OutFile $setup
+            Start-Process $setup -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/ALLUSERS', '/SP-' -Wait
+          }
+          if (-not (Test-Path $iscc)) { throw 'Inno Setup 6 did not install' }
+          (Get-Item $iscc).VersionInfo.ProductVersion
+
+      - name: Run the tests
+        run: dotnet test tests/OneVOneTimer.Tests/OneVOneTimer.Tests.csproj -c Release
+
+      - name: Build the release
+        run: ./tools/release.ps1
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 1v1timer-setup
+          path: releases/1v1timer-setup.exe
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 1v1Timer-release
+          path: |
+            releases/1v1timer-setup.exe
+            releases/1v1Timer-*
+            releases/releases.*
+            releases/assets.*
+            releases/SHA256SUMS.txt
+            releases/release-notes-*.md
+            !releases/1v1Timer-win-Setup.exe
+          if-no-files-found: error
+
+      - name: Publish the release
+        if: (github.event_name == 'workflow_dispatch' && inputs.publish) || startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [xml]$proj = Get-Content src\OneVOneTimer\OneVOneTimer.csproj
+          $version = $proj.Project.PropertyGroup.Version | Where-Object { $_ } | Select-Object -First 1
+          $tag = "v$version"
+          # What the release page carries: the wizard, the update packages and feed, the source zip and the checksums
+          # (not Velopack's inner Setup, which the wizard carries).
+          $files = Get-ChildItem releases -File | Where-Object {
+              ($_.Name -like '1v1Timer-*' -or $_.Name -like 'releases.*' -or $_.Name -like 'assets.*' -or $_.Name -eq 'SHA256SUMS.txt') -and
+              $_.Name -ne '1v1Timer-win-Setup.exe' } | ForEach-Object FullName
+          $files
+          gh release view $tag --repo $env:GITHUB_REPOSITORY *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload $tag @files --repo $env:GITHUB_REPOSITORY --clobber
+          } else {
+            $pre = $version -match '-' ? @('--prerelease') : @('--latest')
+            gh release create $tag @files --repo $env:GITHUB_REPOSITORY --target $env:GITHUB_SHA --title "1v1 Timer $version" `
+              --notes-file "releases\release-notes-$version.md" @pre
+          }

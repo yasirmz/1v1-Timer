@@ -1,0 +1,5 @@
+* text=auto
+*.png binary
+*.ico binary
+# The project page media stays out of the source zip each release ships
+docs/media export-ignore
