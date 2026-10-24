@@ -2,21 +2,27 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:l="clr-namespace:OneVOneTimer.Ui">
 
-    <!-- Tokens (Capture's theme: dark grey and beige) -->
-    <SolidColorBrush x:Key="Bg" Color="#1C1C1E"/>
-    <SolidColorBrush x:Key="NavBg" Color="#161618"/>
-    <SolidColorBrush x:Key="Surface" Color="#27272A"/>
-    <SolidColorBrush x:Key="CardHover" Color="#303034"/>
-    <SolidColorBrush x:Key="Stroke" Color="#3A3A3E"/>
-    <SolidColorBrush x:Key="StrokeStrong" Color="#4E4E53"/>
+    <!-- Tokens: Capture's theme (cards, beige accent) on the logo's background, a near-black with a red tint -->
+    <SolidColorBrush x:Key="Bg" Color="#170F10"/>
+    <!-- The window itself: the logo's plate, a little warmer toward the middle as the logo glows around its dial -->
+    <RadialGradientBrush x:Key="WindowBg" Center="0.5,0.42" GradientOrigin="0.5,0.42" RadiusX="0.75" RadiusY="0.65">
+        <GradientStop Color="#1E1112" Offset="0"/>
+        <GradientStop Color="#170F10" Offset="0.6"/>
+        <GradientStop Color="#140D0E" Offset="1"/>
+    </RadialGradientBrush>
+    <SolidColorBrush x:Key="NavBg" Color="#120B0C"/>
+    <SolidColorBrush x:Key="Surface" Color="#241719"/>
+    <SolidColorBrush x:Key="CardHover" Color="#2E1E21"/>
+    <SolidColorBrush x:Key="Stroke" Color="#3A2A2D"/>
+    <SolidColorBrush x:Key="StrokeStrong" Color="#4F3A3D"/>
     <!-- The outline of a control (field, outlined button): 3:1 against the cards, so it reads as something to press or fill -->
-    <SolidColorBrush x:Key="ControlStroke" Color="#7A7874"/>
-    <SolidColorBrush x:Key="TextPrimary" Color="#EEEAE3"/>
-    <SolidColorBrush x:Key="TextSecondary" Color="#A8A49D"/>
+    <SolidColorBrush x:Key="ControlStroke" Color="#7D6E6E"/>
+    <SolidColorBrush x:Key="TextPrimary" Color="#ECE6D6"/>
+    <SolidColorBrush x:Key="TextSecondary" Color="#A89E98"/>
     <SolidColorBrush x:Key="Accent" Color="#D9C4A1"/>
     <SolidColorBrush x:Key="AccentHover" Color="#DFCDAF"/>
-    <SolidColorBrush x:Key="AccentSoft" Color="#35322F"/>
-    <SolidColorBrush x:Key="OnAccent" Color="#18181A"/>
+    <SolidColorBrush x:Key="AccentSoft" Color="#302623"/>
+    <SolidColorBrush x:Key="OnAccent" Color="#170F10"/>
     <SolidColorBrush x:Key="Success" Color="#2ED47A"/>
     <SolidColorBrush x:Key="Warning" Color="#FFB020"/>
     <FontFamily x:Key="UiFont">Segoe UI Variable Text, Segoe UI</FontFamily>
@@ -180,26 +186,26 @@
     </Style>
 
     <!-- Fields: the same inset look as the segmented buttons (dark fill, hairline border, 8 px corners). -->
-    <SolidColorBrush x:Key="FieldFill" Color="#19191B"/>
-    <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="#1F1F21"/>
-    <SolidColorBrush x:Key="ComboBoxBackgroundFocused" Color="#19191B"/>
-    <SolidColorBrush x:Key="ComboBoxBorderBrushFocused" Color="#4E4E53"/>
-    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#1F1F21"/>
-    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#19191B"/>
-    <SolidColorBrush x:Key="ComboBoxBackgroundDisabled" Color="#27272A"/>
-    <SolidColorBrush x:Key="ComboBoxBorderBrushDisabled" Color="#3A3A3E"/>
-    <SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="#27272A"/>
-    <SolidColorBrush x:Key="TextControlBorderBrushDisabled" Color="#3A3A3E"/>
-    <!-- Pop-ups (drop-down lists, menus, tooltips) on the cards' own grey, not Fluent's #2C2C2C. -->
-    <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#27272A"/>
-    <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#3A3A3E"/>
-    <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#36363A"/>
-    <SolidColorBrush x:Key="ContextMenuBackground" Color="#27272A"/>
-    <SolidColorBrush x:Key="ContextMenuBorderBrush" Color="#3A3A3E"/>
-    <SolidColorBrush x:Key="FlyoutBackground" Color="#27272A"/>
-    <SolidColorBrush x:Key="FlyoutBorderBrush" Color="#3A3A3E"/>
-    <SolidColorBrush x:Key="ToolTipBackground" Color="#27272A"/>
-    <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#3A3A3E"/>
+    <SolidColorBrush x:Key="FieldFill" Color="#140D0E"/>
+    <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="#1C1213"/>
+    <SolidColorBrush x:Key="ComboBoxBackgroundFocused" Color="#140D0E"/>
+    <SolidColorBrush x:Key="ComboBoxBorderBrushFocused" Color="#4F3A3D"/>
+    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#1C1213"/>
+    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#140D0E"/>
+    <SolidColorBrush x:Key="ComboBoxBackgroundDisabled" Color="#241719"/>
+    <SolidColorBrush x:Key="ComboBoxBorderBrushDisabled" Color="#3A2A2D"/>
+    <SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="#241719"/>
+    <SolidColorBrush x:Key="TextControlBorderBrushDisabled" Color="#3A2A2D"/>
+    <!-- Pop-ups (drop-down lists, menus, tooltips) on the cards' own colour, not Fluent's #2C2C2C. -->
+    <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#241719"/>
+    <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#3A2A2D"/>
+    <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#352427"/>
+    <SolidColorBrush x:Key="ContextMenuBackground" Color="#241719"/>
+    <SolidColorBrush x:Key="ContextMenuBorderBrush" Color="#3A2A2D"/>
+    <SolidColorBrush x:Key="FlyoutBackground" Color="#241719"/>
+    <SolidColorBrush x:Key="FlyoutBorderBrush" Color="#3A2A2D"/>
+    <SolidColorBrush x:Key="ToolTipBackground" Color="#241719"/>
+    <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#3A2A2D"/>
     <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
         <Setter Property="Background" Value="{StaticResource FieldFill}"/>
         <Setter Property="BorderBrush" Value="{StaticResource ControlStroke}"/>

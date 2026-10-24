@@ -6,16 +6,17 @@ using System.Windows.Forms;
 namespace OneVOneTimer.App;
 
 /// <summary>
-/// The tray's right-click menu in the app's own look (Capture's): the window's grey, light text, a beige-tinted
-/// highlight and rounded corners (Windows 11), instead of Windows' white menu. A checked item shows a beige tick.
+/// The tray's right-click menu in the app's own look (Capture's, on the logo's background): the window's near-black,
+/// light text, a beige-tinted highlight and rounded corners (Windows 11), instead of Windows' white menu. A checked item
+/// shows a beige tick.
 /// </summary>
 public static class TrayMenu
 {
-    internal const uint Accent = 0xD9C4A1, Background = 0x1C1C1E;
+    internal const uint Accent = 0xD9C4A1, Background = 0x170F10;
     static readonly Color Back = Rgb(Background);
-    static readonly Color Line = Rgb(0x3A3A3E); // Theme.xaml's Stroke
-    static readonly Color Ink = Rgb(0xEEEAE3); // TextPrimary
-    static readonly Color Muted = Rgb(0xA8A49D); // TextSecondary
+    static readonly Color Line = Rgb(0x3A2A2D); // Theme.xaml's Stroke
+    static readonly Color Ink = Rgb(0xECE6D6); // TextPrimary
+    static readonly Color Muted = Rgb(0xA89E98); // TextSecondary
     static readonly Color Highlight = Rgb(Mix(Background, Accent, 0.13)); // AccentSoft
     static readonly Font MenuFont = new("Segoe UI", 9.75f);
     /// <summary>The offered update, first in the menu: bold, in the accent.</summary>
