@@ -16,6 +16,9 @@
 #endif
 ; The name people see, and the timer's settings folder (%AppData%\1v1 Timer).
 #define AppTitle "1v1 Timer"
+; Velopack's launcher at the top of the install folder: named after the package's title, with its space ("1v1 Timer.exe"),
+; not after the program inside current\ (1v1Timer.exe).
+#define StubExe AppTitle + ".exe"
 #define VeloSetup OutDir + "\" + PackId + "-win-Setup.exe"
 ; About what an install takes on its drive: the app (about twice the package) and the package Velopack keeps for updates;
 ; and the Setup itself in the temporary folder while it runs.
@@ -176,17 +179,17 @@ Source: "{#VeloSetup}"; DestName: "{#PackId}-win-Setup.exe"; Flags: dontcopy
 [Icons]
 ; Velopack's uninstaller removes every shortcut that points into the install folder, this one too. Its picture is the
 ; program's own icon (1v1-timer-icon.ico, in the .exe).
-Name: "{userdesktop}\{#AppTitle}"; Filename: "{app}\{#PackId}.exe"; IconFilename: "{app}\current\{#PackId}.exe"; Tasks: desktopicon
+Name: "{userdesktop}\{#AppTitle}"; Filename: "{app}\{#StubExe}"; IconFilename: "{app}\current\{#PackId}.exe"; Tasks: desktopicon
 
 [Registry]
 ; The same entry the timer keeps in step with its setting (Autostart.CommandFor, AppInfo.RunValueName): the wizard writes
 ; the first one, or clears an old one, for when the timer is not started from the last page.
-; {#PackId}.exe is Velopack's launcher at the top of the install folder (named after the package).
-Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "{#PackId}"; ValueData: """{app}\{#PackId}.exe"" --background"; Tasks: autostart
+; {#StubExe} is Velopack's launcher at the top of the install folder (named after the package's title).
+Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "{#PackId}"; ValueData: """{app}\{#StubExe}"" --background"; Tasks: autostart
 Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: none; ValueName: "{#PackId}"; Flags: deletevalue; Tasks: not autostart
 
 [Run]
-Filename: "{app}\{#PackId}.exe"; Description: "{cm:LaunchProgram,{#AppTitle}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#StubExe}"; Description: "{cm:LaunchProgram,{#AppTitle}}"; Flags: nowait postinstall skipifsilent
 
 [Code]
 { Message boxes are suppressible: a silent install (/VERYSILENT /SUPPRESSMSGBOXES) never shows one, it takes the default. }
@@ -292,7 +295,7 @@ begin
       repeat
         Name := Lowercase(Found.Name);
         if (Name <> '.') and (Name <> '..') and (Name <> 'update.exe') and (Name <> 'current') and (Name <> 'packages')
-            and (Name <> Lowercase('{#PackId}.exe')) and (Name <> '.betaid') and (Name <> 'sq.version') then
+            and (Name <> Lowercase('{#StubExe}')) and (Name <> '.betaid') and (Name <> 'sq.version') then
         begin
           Result := False;
           Exit;

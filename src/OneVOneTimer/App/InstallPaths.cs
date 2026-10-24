@@ -5,7 +5,7 @@ namespace OneVOneTimer.App;
 
 /// <summary>
 /// The installed timer: Velopack's folder (%LocalAppData%\1v1Timer), with the program in current\ beside Update.exe and
-/// a small stub 1v1Timer.exe at the top that always starts the current version. A development build is not installed.
+/// a small stub "1v1 Timer.exe" at the top that always starts the current version. A development build is not installed.
 /// </summary>
 public static class InstallPaths
 {
@@ -24,7 +24,11 @@ public static class InstallPaths
             && File.Exists(Path.Combine(root, "Update.exe")) ? root : null;
     }
 
-    public static string StubFor(string root) => Path.Combine(root, AppInfo.ExeName + ".exe");
+    /// <summary>
+    /// Velopack's launcher at the top of the install folder, named after the package's title ("1v1 Timer.exe", with the
+    /// space), not after the program (current\1v1Timer.exe).
+    /// </summary>
+    public static string StubFor(string root) => Path.Combine(root, AppInfo.Name + ".exe");
 
     /// <summary><paramref name="path"/> is <paramref name="root"/> or a folder in it (any case, trailing slashes ignored).</summary>
     public static bool IsInside(string root, string path)

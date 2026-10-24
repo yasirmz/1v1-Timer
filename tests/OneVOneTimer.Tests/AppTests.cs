@@ -34,7 +34,7 @@ public static class AppTests
         Assert.Equal(root, InstallPaths.RootFor(Path.Combine(root, "current", "1v1Timer.exe")), "installed");
         Assert.Equal((string?)null, InstallPaths.RootFor(Path.Combine(root, "1v1Timer.exe")), "the stub itself is not inside current");
         Assert.Equal((string?)null, InstallPaths.RootFor(@"D:\dev\bin\1v1Timer.exe"), "a development build");
-        Assert.Equal(Path.Combine(root, "1v1Timer.exe"), InstallPaths.StubFor(root), "the stub Windows starts");
+        Assert.Equal(Path.Combine(root, "1v1 Timer.exe"), InstallPaths.StubFor(root), "the stub Windows starts: Velopack names it after the title");
     }
 
     [Test]
@@ -42,7 +42,8 @@ public static class AppTests
     {
         string root = @"C:\Users\me\AppData\Local\1v1Timer";
         Assert.Equal("\"C:\\x\\1v1Timer.exe\" --background", Autostart.CommandFor(@"C:\x\1v1Timer.exe"), "the command");
-        Assert.True(Autostart.PointsInto(Autostart.CommandFor(root + @"\1v1Timer.exe"), root), "this install's");
+        Assert.True(Autostart.PointsInto(Autostart.CommandFor(InstallPaths.StubFor(root)), root), "this install's (the stub's name has a space)");
+        Assert.Equal($"\"{root}\\1v1 Timer.exe\" --background", Autostart.CommandFor(InstallPaths.StubFor(root)), "quoted, so the space is safe");
         Assert.True(!Autostart.PointsInto(@"""D:\other\1v1Timer.exe"" --background", root), "another copy's");
         Assert.True(!Autostart.PointsInto(null, root), "none");
     }
