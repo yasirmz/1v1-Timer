@@ -4,3 +4,5 @@ obj/
 .vs/
 dist/
 releases/
+# A local build to try before a release (tools: dotnet publish ... -o test-build)
+test-build/

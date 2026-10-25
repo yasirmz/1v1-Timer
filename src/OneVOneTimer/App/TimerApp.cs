@@ -28,6 +28,8 @@ public sealed class TimerApp(bool background)
     RawInputListener? _keys;
     PadPoller? _pads;
     HidPadListener? _hid;
+    /// <summary>The timers on stream: the page for an OBS Browser Source.</summary>
+    Stream.StreamOverlay? _stream;
     /// <summary>One controller press that arrives twice (a PlayStation controller DS4Windows also shows as an Xbox one).</summary>
     readonly PadEcho _padEcho = new();
     UpdateService _updates = null!;
@@ -74,6 +76,7 @@ public sealed class TimerApp(bool background)
         _pads.Pressed += OnInput;
         _hid = new HidPadListener(ui);
         _hid.Pressed += OnInput;
+        _stream = new Stream.StreamOverlay();
 
         ApplySettings();
         PlaceOverlay();
@@ -94,6 +97,7 @@ public sealed class TimerApp(bool background)
         _keys?.Dispose();
         _pads?.Dispose();
         _hid?.Dispose();
+        _stream?.Dispose();
         _tray.Dispose();
         Log.Info("exit");
         return 0;
@@ -138,6 +142,15 @@ public sealed class TimerApp(bool background)
                 _ = _updates.Check();
         };
         updates.Start();
+
+        // The stream page runs a running timer on by itself; now and then it hears the exact time again.
+        var stream = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
+        stream.Tick += (_, _) =>
+        {
+            if (_clock.AnyRunning)
+                PublishStream();
+        };
+        stream.Start();
     }
 
     /// <summary>A second launch asks for the settings; the uninstaller asks the timer to close.</summary>
@@ -198,6 +211,19 @@ public sealed class TimerApp(bool background)
                 break;
         }
         Render();
+        PublishStream();
+    }
+
+    /// <summary>The timers as they are now, to the stream page (it keeps a running one going between changes).</summary>
+    void PublishStream()
+    {
+        if (_stream == null)
+            return;
+        long now = _clock.Now();
+        Stream.OverlayTimer Timer(int i) => new(_clock.Elapsed(i, now).Ticks / TimeSpan.TicksPerMillisecond, _clock.IsRunning(i));
+        var c = _settings.Colors;
+        _stream.Publish(new Stream.OverlayState([Timer(0), Timer(1)], _clock.Selected, new(c.Timer, c.Selected, c.Last20, c.Background),
+            _settings.TransparentBackground));
     }
 
     // ---- The overlay ----
@@ -296,6 +322,7 @@ public sealed class TimerApp(bool background)
         }
         if (_overlay.IsLoaded)
             Render();
+        PublishStream();
     }
 
     static Brush Frozen(string hex, byte alpha = 255)
@@ -352,7 +379,7 @@ public sealed class TimerApp(bool background)
     /// <summary>A new settings window, where <paramref name="old"/> was (the language changed), the old one then closed.</summary>
     void ShowSettingsWindow(SettingsWindow? old)
     {
-        _vm = new SettingsViewModel(_settings, _updates, OnSettingsChanged, OnLanguageChanged);
+        _vm = new SettingsViewModel(_settings, _updates, OnSettingsChanged, OnLanguageChanged, _stream?.Url);
         var window = new SettingsWindow(_vm);
         window.Closed += (_, _) =>
         {

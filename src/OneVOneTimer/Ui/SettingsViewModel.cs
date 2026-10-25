@@ -17,12 +17,16 @@ public sealed class SettingsViewModel : INotifyPropertyChanged
     readonly Action _changed, _languageChanged;
     readonly UpdateService _updates;
     readonly DispatcherTimer _resetTimeout = new() { Interval = TimeSpan.FromSeconds(4) };
+    readonly DispatcherTimer _copiedTimeout = new() { Interval = TimeSpan.FromSeconds(2) };
+    bool _copied;
     bool _confirmingReset;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public SettingsViewModel(AppSettings settings, UpdateService updates, Action changed, Action languageChanged)
+    /// <param name="streamUrl">The stream page's link (an OBS Browser Source), or null when it could not start.</param>
+    public SettingsViewModel(AppSettings settings, UpdateService updates, Action changed, Action languageChanged, string? streamUrl = null)
     {
+        StreamUrl = streamUrl;
         Settings = settings;
         _updates = updates;
         _changed = changed;
@@ -40,6 +44,13 @@ public sealed class SettingsViewModel : INotifyPropertyChanged
         ResetCommand = new RelayCommand(_ => Reset());
         OpenHelpCommand = new RelayCommand(_ => OpenLink(AppInfo.HelpUrl));
         _resetTimeout.Tick += (_, _) => StopConfirming();
+        CopyStreamLinkCommand = new RelayCommand(_ => CopyStreamLink(), _ => StreamUrl != null);
+        _copiedTimeout.Tick += (_, _) =>
+        {
+            _copiedTimeout.Stop();
+            _copied = false;
+            Raise(nameof(CopyLinkText));
+        };
         _updates.Changed += OnUpdateChanged;
     }
 
@@ -134,6 +145,37 @@ public sealed class SettingsViewModel : INotifyPropertyChanged
             Change(() => set(hex));
     }
 
+    // ---- Stream (OBS) ----
+
+    /// <summary>The link to paste in OBS as a Browser source, or null when no port was free.</summary>
+    public string? StreamUrl { get; }
+
+    public bool HasStreamUrl => StreamUrl != null;
+
+    public string StreamOffText => Text.Format("stream.off", Stream.StreamOverlay.FirstPort, Stream.StreamOverlay.FirstPort + Stream.StreamOverlay.PortsTried - 1);
+
+    public ICommand CopyStreamLinkCommand { get; }
+
+    /// <summary>"Copy link", then "Copied" for a moment.</summary>
+    public string CopyLinkText => Text.Get(_copied ? "stream.copied" : "stream.copy");
+
+    void CopyStreamLink()
+    {
+        try
+        {
+            System.Windows.Clipboard.SetText(StreamUrl!);
+        }
+        catch (System.Runtime.InteropServices.ExternalException e)
+        {
+            Log.Warn("copy link: " + e.Message); // another app holds the clipboard: the link is still there to select
+            return;
+        }
+        _copied = true;
+        Raise(nameof(CopyLinkText));
+        _copiedTimeout.Stop();
+        _copiedTimeout.Start();
+    }
+
     // ---- General ----
 
     public IReadOnlyList<Option> Languages { get; }
@@ -205,6 +247,7 @@ public sealed class SettingsViewModel : INotifyPropertyChanged
     {
         _updates.Changed -= OnUpdateChanged;
         _resetTimeout.Stop();
+        _copiedTimeout.Stop();
     }
 
     /// <summary>The timer changed a setting itself (Clickthrough from the tray): the window shows it.</summary>

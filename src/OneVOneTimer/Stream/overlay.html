@@ -1,0 +1,109 @@
+<!doctype html>
+<!--
+  1v1 Timer on stream: the page an OBS Browser Source shows (Stream/StreamOverlay.cs serves it). The two timers as the
+  timer window draws them: the same time format, colors, Last 20 Seconds rule, transparent outline and shape. A running
+  timer runs on here by itself; the timer sends only its changes.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>1v1 Timer</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: transparent; }
+  svg { display: block; width: 100%; height: 100%; }
+  text { font-family: "Segoe UI", system-ui, sans-serif; font-weight: 700; font-variant-numeric: tabular-nums;
+         paint-order: stroke; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+<svg id="face" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+  <rect id="back" x="0" y="0" width="0" height="0" fill="none"/>
+  <text id="t0" text-anchor="middle"></text>
+  <text id="t1" text-anchor="middle"></text>
+  <text id="probe" visibility="hidden"></text>
+</svg>
+<script>
+"use strict";
+// The timer's own numbers (Overlay/OverlayLayout.cs, Overlay/OverlayFace.cs, Timing/TimeFormat.cs, Timing/TimerColors.cs).
+const EM = 100, HEIGHT_EM = 1.32, SIDE_EM = 0.3, OUTLINE_EM = 0.09, OUTLINE_ALPHA = 210 / 255;
+const RESERVED = "0:00.00", LAST20_MS = 20000;
+const face = document.getElementById("face"), back = document.getElementById("back"), probe = document.getElementById("probe");
+const texts = [document.getElementById("t0"), document.getElementById("t1")];
+for (const t of [...texts, probe]) t.setAttribute("font-size", EM);
+
+let state = null, receivedAt = 0, frame = 0, digitMiddle = null;
+const widths = new Map();
+
+// "12.34" under a minute, then "1:33.45" (and "75:12.34"): hundredths cut, never rounded up.
+function format(ms) {
+  const hundredths = Math.max(0, Math.floor(ms / 10)), seconds = Math.floor(hundredths / 100);
+  const fraction = String(hundredths % 100).padStart(2, "0");
+  return seconds < 60 ? `${seconds}.${fraction}` : `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}.${fraction}`;
+}
+
+const pattern = text => text.replace(/[0-9]/g, "0");
+
+function widthEm(text) {
+  let w = widths.get(text);
+  if (w === undefined) {
+    probe.textContent = text;
+    w = probe.getComputedTextLength() / EM;
+    widths.set(text, w);
+  }
+  return w;
+}
+
+// Timer 2 in the 20 seconds before it reaches Timer 1's time (both above 0): Last 20 Seconds, then Selected, then Timer.
+function colorOf(i, ms) {
+  const c = state.colors;
+  if (i === 1 && ms[0] > 0 && ms[1] > 0 && ms[1] < ms[0] && ms[0] - ms[1] <= LAST20_MS)
+    return c.last20;
+  return i === state.selected ? c.selected : c.timer;
+}
+
+function draw() {
+  frame = 0;
+  if (!state)
+    return;
+  const now = performance.now();
+  const ms = state.timers.map(t => t.ms + (t.running ? now - receivedAt : 0));
+  const shown = ms.map(format);
+  const boxEm = Math.max(widthEm(RESERVED), ...shown.map(s => widthEm(pattern(s)))) + 2 * SIDE_EM;
+  const w = 2 * boxEm * EM, h = HEIGHT_EM * EM;
+  if (digitMiddle === null) {
+    probe.textContent = "0";
+    const zero = probe.getBBox();
+    digitMiddle = zero.y + zero.height / 2; // the digits sit in the middle, as in the window
+  }
+  face.setAttribute("viewBox", `0 0 ${w} ${h}`);
+  back.setAttribute("width", w);
+  back.setAttribute("height", h);
+  back.setAttribute("fill", state.transparent ? "none" : state.colors.background);
+  texts.forEach((t, i) => {
+    t.textContent = shown[i];
+    t.setAttribute("x", (i + 0.5) * boxEm * EM);
+    t.setAttribute("y", h / 2 - digitMiddle);
+    t.setAttribute("fill", colorOf(i, ms));
+    if (state.transparent) {
+      t.setAttribute("stroke", state.colors.background);
+      t.setAttribute("stroke-opacity", OUTLINE_ALPHA);
+      t.setAttribute("stroke-width", OUTLINE_EM * EM);
+    } else {
+      t.removeAttribute("stroke");
+    }
+  });
+  if (state.timers.some(t => t.running))
+    frame = requestAnimationFrame(draw);
+}
+
+// The timer's changes; EventSource reconnects by itself when the timer starts again.
+const events = new EventSource("/events");
+events.onmessage = e => {
+  state = JSON.parse(e.data);
+  receivedAt = performance.now();
+  if (!frame)
+    frame = requestAnimationFrame(draw);
+};
+</script>
+</body>
+</html>

@@ -71,6 +71,16 @@ As atualizações vêm de dentro do app, quando você clica em Atualizar. Desins
 - **Jogos executados como administrador:** se um jogo roda como administrador, o Windows pode impedir que as teclas dele cheguem a um cronômetro que não roda assim. Execute o 1v1 Timer como administrador também, ou use o controle, que funciona nos dois casos.
 - **Controles:** Xbox, PlayStation (DualSense, DualShock 4) e a maioria dos outros controles, sem nenhum app extra. Num controle de PlayStation, o X é A, a bola é B, o quadrado é X e o triângulo é Y.
 
+## Na transmissão (OBS)
+
+A Captura de jogo (Game Capture) grava só o jogo, então uma janela sobre o jogo (o cronômetro também) nunca chega à sua transmissão. Por isso o 1v1 Timer dá ao OBS uma cópia própria:
+
+1. No 1v1 Timer, abra **Configurações → Transmissão (OBS)** e clique em **Copiar link** (é `http://127.0.0.1:47123/`).
+2. No OBS: **Fontes → + → Navegador**, cole o link como URL e use largura **700** e altura **140**.
+3. Coloque onde quiser na cena. Mostra os dois cronômetros com suas cores, transparente com **Fundo transparente**, e no compasso do cronômetro.
+
+O link só funciona no seu PC: nada na internet consegue chegar a ele.
+
 ## Anti-cheat (Vanguard, Easy Anti-Cheat, VAC)
 
 **O 1v1 Timer pode fazer minha conta do Valorant, Fortnite ou Steam ser banida?**

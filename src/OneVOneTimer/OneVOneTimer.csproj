@@ -34,6 +34,8 @@
 
   <ItemGroup>
     <EmbeddedResource Include="App\Lang\*.json" LogicalName="Lang.%(Filename).json" />
+    <!-- The stream page (an OBS Browser Source) -->
+    <EmbeddedResource Include="Stream\overlay.html" LogicalName="overlay.html" />
     <Resource Include="..\..\1v1-timer-icon.ico" Link="app.ico" />
     <Resource Include="Ui\Assets\*.png" />
   </ItemGroup>

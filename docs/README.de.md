@@ -71,6 +71,16 @@ Updates kommen aus der App selbst, wenn Sie auf Aktualisieren klicken. Beim Dein
 - **Spiele mit Administratorrechten:** Läuft ein Spiel als Administrator, lässt Windows seine Tasten eventuell nicht zu einem Timer durch, der ohne diese Rechte läuft. Starten Sie 1v1 Timer dann ebenfalls als Administrator, oder nutzen Sie den Controller, der in beiden Fällen funktioniert.
 - **Controller:** Xbox, PlayStation (DualSense, DualShock 4) und die meisten anderen Controller, ohne zusätzliche App. Bei einem PlayStation-Controller ist Kreuz A, Kreis B, Quadrat X und Dreieck Y.
 
+## Im Stream (OBS)
+
+Die Spielaufnahme (Game Capture) nimmt nur das Spiel auf, daher erscheint ein Fenster über dem Spiel (auch der Timer) nie im Stream. 1v1 Timer gibt OBS deshalb eine eigene Kopie:
+
+1. Öffnen Sie in 1v1 Timer **Einstellungen → Stream (OBS)** und klicken Sie auf **Link kopieren** (er lautet `http://127.0.0.1:47123/`).
+2. In OBS: **Quellen → + → Browser**, fügen Sie den Link als URL ein, Breite **700**, Höhe **140**.
+3. Setzen Sie ihn an eine beliebige Stelle Ihrer Szene. Er zeigt beide Timer in Ihren Farben, durchsichtig mit **Transparenter Hintergrund**, und im Takt des Timers.
+
+Der Link funktioniert nur auf Ihrem PC: Aus dem Internet ist er nicht erreichbar.
+
 ## Anti-Cheat (Vanguard, Easy Anti-Cheat, VAC)
 
 **Kann 1v1 Timer meinen Valorant-, Fortnite- oder Steam-Account sperren lassen?**

@@ -71,6 +71,16 @@ Updates come from inside the app, when you press Update. Uninstalling keeps your
 - **Games run as administrator:** if a game runs as administrator, Windows may keep its keys from reaching a timer that does not. Start 1v1 Timer as administrator too, or use the controller, which works either way.
 - **Controllers:** Xbox, PlayStation (DualSense, DualShock 4) and most other controllers, with no extra app. On a PlayStation controller, Cross is A, Circle B, Square X and Triangle Y.
 
+## On stream (OBS)
+
+Game Capture records only the game, so a window over the game (the timer too) never reaches your stream. 1v1 Timer gives OBS its own copy instead:
+
+1. In 1v1 Timer, open **Settings → Stream (OBS)** and press **Copy link** (it is `http://127.0.0.1:47123/`).
+2. In OBS: **Sources → + → Browser**, paste the link as the URL, and set width **700** and height **140**.
+3. Place it anywhere on your scene. It shows the two timers with your colors, see-through with **Transparent Background**, and in step with the timer.
+
+The link works on your PC only: nothing can reach it from the internet.
+
 ## Anti-cheat (Vanguard, Easy Anti-Cheat, VAC)
 
 **Can 1v1 Timer get my Valorant, Fortnite or Steam account banned?**
