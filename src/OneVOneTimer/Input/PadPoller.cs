@@ -5,8 +5,8 @@ namespace OneVOneTimer.Input;
 
 /// <summary>
 /// Xbox controllers (and others that work like one) through XInput, read on a background thread: a connected slot every
-/// few milliseconds, an empty one every 2 seconds (asking an empty slot is slow). Controllers are read whichever app is
-/// in front. Presses are posted to the UI thread.
+/// few milliseconds, an empty one every 2 seconds (asking an empty slot is slow), and with none connected the thread
+/// mostly sleeps. Controllers are read whichever app is in front. Presses are posted to the UI thread.
 /// </summary>
 public sealed class PadPoller : IDisposable
 {
@@ -56,6 +56,8 @@ public sealed class PadPoller : IDisposable
                     int buttons = Buttons(pad.Buttons, pad.LeftTrigger, pad.RightTrigger, previous[slot]);
                     // Buttons already held when a controller connects are not presses.
                     int pressed = connected[slot] ? buttons & ~previous[slot] : 0;
+                    if (!connected[slot])
+                        TimerResolution.Raise(); // a controller is there: the 4 ms waits are 4 ms
                     connected[slot] = true;
                     previous[slot] = buttons;
                     if (pressed != 0)
@@ -63,7 +65,8 @@ public sealed class PadPoller : IDisposable
                             if ((pressed & (int)button) != 0)
                                 _ui.Post(b => Pressed?.Invoke((InputBinding)b!), InputBinding.Pad(button));
                 }
-                Thread.Sleep(4);
+                // With no controller connected nothing is read: the thread only wakes to look at the empty slots.
+                Thread.Sleep(connected.Contains(true) ? 4 : 250);
             }
         }
         catch (Exception e) when (e is DllNotFoundException or EntryPointNotFoundException)

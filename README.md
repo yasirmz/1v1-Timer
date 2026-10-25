@@ -32,6 +32,7 @@
 - **Keyboard, mouse or controller.** Each action has a key or mouse button, and a controller button of its own.
 - **Know when it's close.** Timer 2 turns orange in the last 20 seconds before it reaches Timer 1's time.
 - **Never in the way.** It never takes the focus from your game. Drag it anywhere, and drag its edges or corner to make it bigger or smaller.
+- **Light on your game.** It never uses the graphics card, next to no CPU while the timers are stopped, and under 1% of the CPU while one runs.
 - **Private.** No account, no telemetry. It goes online only to look for updates.
 
 ## Download

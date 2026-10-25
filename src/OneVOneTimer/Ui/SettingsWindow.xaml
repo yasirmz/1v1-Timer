@@ -61,6 +61,33 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!-- The × at the end of a hotkey box: the binding becomes None (never takes the focus, so the box does not start listening) -->
+        <Style x:Key="ClearBinding" TargetType="Button">
+            <Setter Property="Width" Value="24"/>
+            <Setter Property="Height" Value="24"/>
+            <Setter Property="Margin" Value="0,0,6,0"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="Transparent" CornerRadius="6">
+                            <TextBlock Text="&#xE711;" FontFamily="{StaticResource IconFont}" FontSize="10" FlowDirection="LeftToRight"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{TemplateBinding Foreground}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource CardHover}"/>
+                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <!-- A switch row's label and the line under it -->
         <Style x:Key="RowText" TargetType="StackPanel">
             <Setter Property="Margin" Value="0,0,16,0"/>
@@ -121,8 +148,16 @@
                                             <ColumnDefinition Width="170"/>
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Style="{StaticResource Label}" Text="{Binding Label}" TextWrapping="Wrap" Margin="0,0,12,0"/>
-                                        <l:BindingBox Grid.Column="1" BindingText="{Binding Key}" AutomationProperties.Name="{Binding Label}"/>
-                                        <l:BindingBox Grid.Column="3" BindingText="{Binding Pad}" IsPad="True" AutomationProperties.Name="{Binding Label}"/>
+                                        <Grid Grid.Column="1">
+                                            <l:BindingBox BindingText="{Binding Key}" AutomationProperties.Name="{Binding Label}"/>
+                                            <Button Style="{StaticResource ClearBinding}" Command="{Binding ClearKeyCommand}" ToolTip="{l:T hotkeys.clear}"
+                                                    AutomationProperties.Name="{l:T hotkeys.clear}" Visibility="{Binding HasKey, Converter={StaticResource Vis}}"/>
+                                        </Grid>
+                                        <Grid Grid.Column="3">
+                                            <l:BindingBox BindingText="{Binding Pad}" IsPad="True" AutomationProperties.Name="{Binding Label}"/>
+                                            <Button Style="{StaticResource ClearBinding}" Command="{Binding ClearPadCommand}" ToolTip="{l:T hotkeys.clear}"
+                                                    AutomationProperties.Name="{l:T hotkeys.clear}" Visibility="{Binding HasPad, Converter={StaticResource Vis}}"/>
+                                        </Grid>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

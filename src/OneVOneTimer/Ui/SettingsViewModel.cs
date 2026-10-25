@@ -282,9 +282,17 @@ public sealed class HotkeyRow(SettingsViewModel owner, TimerAction action, strin
         set => owner.SetBinding(action, pad: true, value);
     }
 
+    /// <summary>The box has a binding (its × shows).</summary>
+    public bool HasKey => Key.Length > 0;
+    public bool HasPad => Pad.Length > 0;
+
+    /// <summary>The ×: the binding becomes None (a controller has few buttons, so any of them can be left free for the game).</summary>
+    public ICommand ClearKeyCommand { get; } = new RelayCommand(_ => owner.SetBinding(action, pad: false, ""));
+    public ICommand ClearPadCommand { get; } = new RelayCommand(_ => owner.SetBinding(action, pad: true, ""));
+
     internal void Refresh()
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Key)));
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Pad)));
+        foreach (string p in new[] { nameof(Key), nameof(Pad), nameof(HasKey), nameof(HasPad) })
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(p));
     }
 }

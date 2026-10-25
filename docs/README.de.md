@@ -32,6 +32,7 @@
 - **Tastatur, Maus oder Controller.** Jede Aktion hat eine Taste oder Maustaste und eine eigene Controller-Taste.
 - **Sehen, wann es knapp wird.** Timer 2 wird in den letzten 20 Sekunden, bevor er die Zeit von Timer 1 erreicht, orange.
 - **Nie im Weg.** Er nimmt Ihrem Spiel nie den Fokus. Ziehen Sie ihn an jede Stelle, und ziehen Sie an seinen Rändern oder an der Ecke, um ihn größer oder kleiner zu machen.
+- **Schont Ihr Spiel.** Es nutzt nie die Grafikkarte, kaum CPU, solange die Timer stehen, und unter 1 % der CPU, während einer läuft.
 - **Privat.** Kein Konto, keine Telemetrie. Er geht nur online, um nach Updates zu suchen.
 
 ## Download

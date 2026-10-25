@@ -101,6 +101,9 @@ public sealed class TimerApp(bool background)
 
     static System.Windows.Application CreateApplication()
     {
+        // Drawn on the CPU, never on the graphics card the game is using: the timer is small, and a see-through window
+        // drawn on the GPU is copied back from it every frame.
+        System.Windows.Media.RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly;
         var app = new System.Windows.Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         app.DispatcherUnhandledException += (_, e) =>
         {

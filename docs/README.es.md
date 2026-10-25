@@ -32,6 +32,7 @@
 - **Teclado, ratón o mando.** Cada acción tiene una tecla o un botón del ratón, y un botón del mando propio.
 - **Sepa cuándo está cerca.** El cronómetro 2 se vuelve naranja en los últimos 20 segundos antes de alcanzar el tiempo del cronómetro 1.
 - **Nunca estorba.** Nunca le quita el foco al juego. Arrástrelo a cualquier sitio, y arrastre sus bordes o su esquina para agrandarlo o achicarlo.
+- **Ligero para tu juego.** Nunca usa la tarjeta gráfica, casi no usa la CPU con los temporizadores parados y menos del 1% de la CPU mientras uno corre.
 - **Privado.** Sin cuenta ni telemetría. Solo se conecta a internet para buscar actualizaciones.
 
 ## Descarga

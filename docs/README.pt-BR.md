@@ -32,6 +32,7 @@
 - **Teclado, mouse ou controle.** Cada ação tem uma tecla ou um botão do mouse, e um botão do controle só seu.
 - **Saiba quando está perto.** O cronômetro 2 fica laranja nos últimos 20 segundos antes de chegar ao tempo do cronômetro 1.
 - **Nunca atrapalha.** Ele nunca tira o foco do jogo. Arraste-o para qualquer lugar, e arraste as bordas ou o canto para aumentá-lo ou diminuí-lo.
+- **Leve para o seu jogo.** Nunca usa a placa de vídeo, quase não usa a CPU com os cronômetros parados e menos de 1% da CPU enquanto um corre.
 - **Privado.** Sem conta, sem telemetria. Só se conecta à internet para procurar atualizações.
 
 ## Download
