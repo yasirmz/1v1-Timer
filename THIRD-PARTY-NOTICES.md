@@ -13,3 +13,5 @@ The .NET runtime (MIT) is included in the program. 1v1 Timer's complete source c
 The icons in the interface come from the Segoe Fluent Icons font that ships with Windows; they are not redistributed. The 1v1 Timer logo and icon (`1v1-timer-icon.ico`, `docs/media/logo.png` and the pictures made from it) were supplied by the project owner.
 
 The install wizard is built with Inno Setup (<https://jrsoftware.org/isinfo.php>). Its Simplified Chinese messages (`installer/Languages/ChineseSimplified.isl`) come from Inno Setup's unofficial translations, as in Capture.
+
+The Saudi flag beside "Built by Yasir" at the foot of the settings window (`src/OneVOneTimer/Ui/Assets/flag-sa.png`) is the 🇸🇦 emoji of **Twemoji** 15.1.0 (`assets/72x72/1f1f8-1f1e6.png`, <https://github.com/jdecked/twemoji>), unmodified, Copyright 2019 Twitter, Inc and other contributors, licensed under CC-BY 4.0 (<https://creativecommons.org/licenses/by/4.0/>). Its license text ships as `licenses/Twemoji-CC-BY-4.0.txt`.

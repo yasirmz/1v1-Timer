@@ -65,7 +65,7 @@ $icon = Join-Path $repo '1v1-timer-icon.ico'
 New-Item -ItemType Directory -Force $out | Out-Null
 # Velopack signs what is not signed yet (1v1Timer.exe, Update.exe, its Setup) before packing.
 $signArgs = $signParams ? @('--signParams', $signParams) : @()
-& $vpk pack --packId $PackId --packVersion $Version --packDir $stage --mainExe "$PackId.exe" --packTitle $title --packAuthors $title `
+& $vpk pack --packId $PackId --packVersion $Version --packDir $stage --mainExe "$PackId.exe" --packTitle $title --packAuthors Yasir `
     --icon $icon --shortcuts StartMenuRoot --releaseNotes $notes --outputDir $out @signArgs
 if ($LASTEXITCODE -ne 0) { throw 'vpk pack failed' }
 # The release page carries the Setup only: no portable zip.

@@ -356,7 +356,15 @@
                     </StackPanel>
                 </Border>
 
-                <TextBlock Text="{Binding VersionText}" Style="{StaticResource Caption}" HorizontalAlignment="Center" Margin="0,6,0,0" Opacity="0.7"/>
+                <!-- The version, and who made the timer (the flag is a picture: Windows draws no flag emoji in an app) -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,6,0,0">
+                    <TextBlock Text="{Binding VersionText}" Style="{StaticResource Caption}" Margin="0" VerticalAlignment="Center" Opacity="0.7"/>
+                    <TextBlock Text="·" Style="{StaticResource Caption}" Margin="8,0" VerticalAlignment="Center" Opacity="0.7"/>
+                    <TextBlock Text="{l:T general.builtBy}" Style="{StaticResource Caption}" Margin="0" VerticalAlignment="Center"/>
+                    <Image Source="pack://application:,,,/1v1Timer;component/Ui/Assets/flag-sa.png" Width="18" Height="18" Margin="6,0,0,0"
+                           VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" ToolTip="{l:T general.saudiArabia}"
+                           AutomationProperties.Name="{l:T general.saudiArabia}"/>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
     </Grid>

@@ -66,5 +66,7 @@
   "general.community": "帮助与建议",
   "general.help": "打开 GitHub",
   "general.version": "版本 {0}",
+  "general.builtBy": "由 Yasir 打造",
+  "general.saudiArabia": "沙特阿拉伯",
   "version.beta": "{0} 测试版 {1}"
 }

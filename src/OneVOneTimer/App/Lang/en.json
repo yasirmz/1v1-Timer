@@ -66,5 +66,7 @@
   "general.community": "Help and ideas",
   "general.help": "Open GitHub",
   "general.version": "Version {0}",
+  "general.builtBy": "Built by Yasir",
+  "general.saudiArabia": "Saudi Arabia",
   "version.beta": "{0} beta {1}"
 }

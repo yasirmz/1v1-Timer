@@ -66,5 +66,7 @@
   "general.community": "المساعدة والأفكار",
   "general.help": "افتح GitHub",
   "general.version": "الإصدار {0}",
+  "general.builtBy": "صنعه ياسر",
+  "general.saudiArabia": "المملكة العربية السعودية",
   "version.beta": "{0} تجريبي {1}"
 }
