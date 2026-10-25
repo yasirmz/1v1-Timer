@@ -66,7 +66,7 @@ Updates kommen aus der App selbst, wenn Sie auf Aktualisieren klicken. Beim Dein
 
 - **Nutzen Sie den rahmenlosen Modus oder den Fenstermodus.** Ein Spiel im exklusiven Vollbild belegt den ganzen Bildschirm, und Windows zeichnet kein anderes Fenster darüber – dort kann also kein Overlay erscheinen. Rahmenlos („Vollbild im Fenster“) sieht gleich aus und zeigt den Timer.
 - **Spiele mit Administratorrechten:** Läuft ein Spiel als Administrator, lässt Windows seine Tasten eventuell nicht zu einem Timer durch, der ohne diese Rechte läuft. Starten Sie 1v1 Timer dann ebenfalls als Administrator, oder nutzen Sie den Controller, der in beiden Fällen funktioniert.
-- **Controller:** Xbox-Controller und jeder Controller, der genauso funktioniert (XInput). Ein PlayStation-Controller funktioniert über Steam Input oder DS4Windows.
+- **Controller:** Xbox, PlayStation (DualSense, DualShock 4) und die meisten anderen Controller, ohne zusätzliche App. Bei einem PlayStation-Controller ist Kreuz A, Kreis B, Quadrat X und Dreieck Y.
 
 ## Datenschutz
 

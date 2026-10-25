@@ -18,7 +18,7 @@
   "hotkeys.pressPad": "Pulse un botón…",
   "hotkeys.none": "Ninguno",
   "hotkeys.tip": "Haga clic en una casilla y pulse una tecla, un botón del ratón o un botón del mando. Esc cancela, Supr borra. El juego sigue recibiendo todas las teclas.",
-  "hotkeys.padTip": "Mandos: Xbox y cualquier mando que funcione igual (XInput).",
+  "hotkeys.padTip": "Mandos: Xbox, PlayStation (DualSense, DualShock 4) y la mayoría de los demás, sin ninguna otra aplicación. En PlayStation, la X es A, el círculo B, el cuadrado X y el triángulo Y.",
   "key.mouseMiddle": "Ratón: central",
   "key.mouseBack": "Ratón: atrás",
   "key.mouseForward": "Ratón: adelante",

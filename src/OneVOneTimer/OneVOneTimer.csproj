@@ -16,7 +16,7 @@
     <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..'))=/_/</PathMap>
     <AssemblyName>1v1Timer</AssemblyName>
     <RootNamespace>OneVOneTimer</RootNamespace>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Product>1v1 Timer</Product>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <!-- The one icon everywhere: the .exe (Explorer, the Start menu and desktop shortcuts), the windows, the taskbar and the tray -->

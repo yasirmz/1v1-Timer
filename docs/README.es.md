@@ -66,7 +66,7 @@ Las actualizaciones llegan desde la propia aplicación, cuando pulsa Actualizar.
 
 - **Use el modo sin bordes o en ventana.** Un juego en pantalla completa exclusiva ocupa toda la pantalla y Windows no dibuja ninguna otra ventana encima, así que ninguna superposición puede verse ahí. El modo sin bordes («pantalla completa en ventana») se ve igual y muestra el cronómetro.
 - **Juegos ejecutados como administrador:** si un juego se ejecuta como administrador, Windows puede impedir que sus teclas lleguen a un cronómetro que no lo hace. Ejecute 1v1 Timer como administrador también, o use el mando, que funciona en ambos casos.
-- **Mandos:** mandos de Xbox y cualquier mando que funcione igual (XInput). Un mando de PlayStation funciona con Steam Input o DS4Windows.
+- **Mandos:** Xbox, PlayStation (DualSense, DualShock 4) y la mayoría de los demás mandos, sin ninguna otra aplicación. En un mando de PlayStation, la X es A, el círculo B, el cuadrado X y el triángulo Y.
 
 ## Privacidad
 

@@ -66,7 +66,7 @@ Updates come from inside the app, when you press Update. Uninstalling keeps your
 
 - **Use Borderless or Windowed mode.** A game in exclusive fullscreen owns the whole screen, and Windows draws no other window over it, so no overlay can show there. Borderless (or "fullscreen windowed") looks the same and shows the timer.
 - **Games run as administrator:** if a game runs as administrator, Windows may keep its keys from reaching a timer that does not. Start 1v1 Timer as administrator too, or use the controller, which works either way.
-- **Controllers:** Xbox controllers and any controller that works like one (XInput). A PlayStation controller works through Steam Input or DS4Windows.
+- **Controllers:** Xbox, PlayStation (DualSense, DualShock 4) and most other controllers, with no extra app. On a PlayStation controller, Cross is A, Circle B, Square X and Triangle Y.
 
 ## Privacy
 

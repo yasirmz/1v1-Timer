@@ -27,6 +27,9 @@ public sealed class TimerApp(bool background)
     TrayController _tray = null!;
     RawInputListener? _keys;
     PadPoller? _pads;
+    HidPadListener? _hid;
+    /// <summary>One controller press that arrives twice (a PlayStation controller DS4Windows also shows as an Xbox one).</summary>
+    readonly PadEcho _padEcho = new();
     UpdateService _updates = null!;
     SettingsWindow? _settingsWindow;
     SettingsViewModel? _vm;
@@ -69,6 +72,8 @@ public sealed class TimerApp(bool background)
         _keys.Pressed += OnInput;
         _pads = new PadPoller(ui);
         _pads.Pressed += OnInput;
+        _hid = new HidPadListener(ui);
+        _hid.Pressed += OnInput;
 
         ApplySettings();
         PlaceOverlay();
@@ -88,6 +93,7 @@ public sealed class TimerApp(bool background)
         SaveNow();
         _keys?.Dispose();
         _pads?.Dispose();
+        _hid?.Dispose();
         _tray.Dispose();
         Log.Info("exit");
         return 0;
@@ -154,6 +160,8 @@ public sealed class TimerApp(bool background)
 
     void OnInput(InputBinding input)
     {
+        if (input.Kind == InputKind.Pad && _padEcho.IsEcho(input.Code, Environment.TickCount64))
+            return;
         // A hotkey box waiting for an input takes it, and nothing else happens.
         if (BindingBox.Listening is { } box)
         {

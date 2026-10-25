@@ -112,7 +112,7 @@ public sealed class RawInputListener : NativeWindow, IDisposable
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    struct RAWINPUTDEVICE
+    internal struct RAWINPUTDEVICE
     {
         public ushort UsagePage, Usage;
         public uint Flags;
@@ -120,7 +120,7 @@ public sealed class RawInputListener : NativeWindow, IDisposable
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    struct RAWINPUTHEADER
+    internal struct RAWINPUTHEADER
     {
         public uint Type, Size;
         public IntPtr Device, WParam;
@@ -145,8 +145,8 @@ public sealed class RawInputListener : NativeWindow, IDisposable
     }
 
     [DllImport("user32.dll", SetLastError = true)]
-    static extern bool RegisterRawInputDevices(RAWINPUTDEVICE[] devices, uint count, uint size);
+    internal static extern bool RegisterRawInputDevices(RAWINPUTDEVICE[] devices, uint count, uint size);
 
     [DllImport("user32.dll")]
-    static extern uint GetRawInputData(IntPtr input, uint command, IntPtr data, ref uint size, uint headerSize);
+    internal static extern uint GetRawInputData(IntPtr input, uint command, IntPtr data, ref uint size, uint headerSize);
 }

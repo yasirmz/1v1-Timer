@@ -18,7 +18,7 @@
   "hotkeys.pressPad": "اضغط زرًا…",
   "hotkeys.none": "بدون",
   "hotkeys.tip": "انقر على خانة، ثم اضغط مفتاحًا أو زرًا في الفأرة أو في يد التحكم. Esc للإلغاء، وDelete للمسح. تبقى اللعبة تستقبل كل المفاتيح.",
-  "hotkeys.padTip": "يد التحكم: Xbox، وأي يد تحكم تعمل مثلها (XInput).",
+  "hotkeys.padTip": "يد التحكم: Xbox وPlayStation (DualSense وDualShock 4) ومعظم الأنواع الأخرى، دون أي برنامج إضافي. في PlayStation: الإكس هو A، والدائرة B، والمربع X، والمثلث Y.",
   "key.mouseMiddle": "زر الفأرة الأوسط",
   "key.mouseBack": "زر الفأرة للخلف",
   "key.mouseForward": "زر الفأرة للأمام",

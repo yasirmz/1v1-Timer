@@ -18,7 +18,7 @@
   "hotkeys.pressPad": "Нажмите кнопку…",
   "hotkeys.none": "Нет",
   "hotkeys.tip": "Щёлкните поле, затем нажмите клавишу, кнопку мыши или кнопку геймпада. Esc — отмена, Delete — очистить. Игра по-прежнему получает каждое нажатие.",
-  "hotkeys.padTip": "Геймпады: Xbox и любой геймпад, который работает так же (XInput).",
+  "hotkeys.padTip": "Геймпады: Xbox, PlayStation (DualSense, DualShock 4) и большинство других, без дополнительных программ. На PlayStation крестик — это A, круг — B, квадрат — X, треугольник — Y.",
   "key.mouseMiddle": "Средняя кнопка мыши",
   "key.mouseBack": "Мышь: назад",
   "key.mouseForward": "Мышь: вперёд",

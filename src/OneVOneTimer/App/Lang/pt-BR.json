@@ -18,7 +18,7 @@
   "hotkeys.pressPad": "Pressione um botão…",
   "hotkeys.none": "Nenhum",
   "hotkeys.tip": "Clique em uma caixa e pressione uma tecla, um botão do mouse ou um botão do controle. Esc cancela, Delete limpa. O jogo continua recebendo todas as teclas.",
-  "hotkeys.padTip": "Controles: Xbox e qualquer controle que funcione como ele (XInput).",
+  "hotkeys.padTip": "Controles: Xbox, PlayStation (DualSense, DualShock 4) e a maioria dos outros, sem nenhum app extra. No PlayStation, o X é A, a bola é B, o quadrado é X e o triângulo é Y.",
   "key.mouseMiddle": "Mouse: meio",
   "key.mouseBack": "Mouse: voltar",
   "key.mouseForward": "Mouse: avançar",

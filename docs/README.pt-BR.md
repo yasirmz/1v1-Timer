@@ -66,7 +66,7 @@ As atualizações vêm de dentro do app, quando você clica em Atualizar. Desins
 
 - **Use o modo sem bordas ou em janela.** Um jogo em tela cheia exclusiva ocupa a tela inteira, e o Windows não desenha nenhuma outra janela por cima dele, então nenhuma sobreposição aparece ali. O modo sem bordas («tela cheia em janela») fica igual e mostra o cronômetro.
 - **Jogos executados como administrador:** se um jogo roda como administrador, o Windows pode impedir que as teclas dele cheguem a um cronômetro que não roda assim. Execute o 1v1 Timer como administrador também, ou use o controle, que funciona nos dois casos.
-- **Controles:** controles de Xbox e qualquer controle que funcione como ele (XInput). Um controle de PlayStation funciona pelo Steam Input ou pelo DS4Windows.
+- **Controles:** Xbox, PlayStation (DualSense, DualShock 4) e a maioria dos outros controles, sem nenhum app extra. Num controle de PlayStation, o X é A, a bola é B, o quadrado é X e o triângulo é Y.
 
 ## Privacidade
 

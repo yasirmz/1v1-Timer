@@ -18,7 +18,7 @@
   "hotkeys.pressPad": "Controller-Taste drücken…",
   "hotkeys.none": "Keins",
   "hotkeys.tip": "Klicken Sie auf ein Feld und drücken Sie dann eine Taste, eine Maustaste oder eine Controller-Taste. Esc bricht ab, Entf löscht. Das Spiel bekommt weiterhin jede Taste.",
-  "hotkeys.padTip": "Controller: Xbox und jeder Controller, der genauso funktioniert (XInput).",
+  "hotkeys.padTip": "Controller: Xbox, PlayStation (DualSense, DualShock 4) und die meisten anderen, ohne zusätzliche App. Bei PlayStation ist Kreuz A, Kreis B, Quadrat X und Dreieck Y.",
   "key.mouseMiddle": "Mittlere Maustaste",
   "key.mouseBack": "Maus: Zurück",
   "key.mouseForward": "Maus: Vorwärts",
