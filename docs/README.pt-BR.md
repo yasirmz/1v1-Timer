@@ -71,6 +71,21 @@ As atualizações vêm de dentro do app, quando você clica em Atualizar. Desins
 - **Jogos executados como administrador:** se um jogo roda como administrador, o Windows pode impedir que as teclas dele cheguem a um cronômetro que não roda assim. Execute o 1v1 Timer como administrador também, ou use o controle, que funciona nos dois casos.
 - **Controles:** Xbox, PlayStation (DualSense, DualShock 4) e a maioria dos outros controles, sem nenhum app extra. Num controle de PlayStation, o X é A, a bola é B, o quadrado é X e o triângulo é Y.
 
+## Anti-cheat (Vanguard, Easy Anti-Cheat, VAC)
+
+**O 1v1 Timer pode fazer minha conta do Valorant, Fortnite ou Steam ser banida?**
+
+O 1v1 Timer não faz nada do que o anti-cheat pune. É um programa à parte, com a própria janela, como o Discord ou o OBS, e nunca mexe no jogo:
+
+- Nunca abre, lê nem altera a memória de um jogo, nem coloca código nele.
+- Nunca aperta teclas, clica nem aperta botões do controle por você. Ele só escuta os toques, como o Windows permite a qualquer app, e o jogo continua recebendo cada um.
+- Não instala nenhum driver nem precisa de permissão de administrador.
+- Mostra dois cronômetros; não faz nada no jogo por você.
+
+Nenhum anti-cheat deixa um app se cadastrar como seguro, então só a Riot, a Epic ou a Valve podem falar por eles. Mas um cronômetro que nunca mexe no jogo não é o que eles procuram. Isso é verificado a cada mudança: os [testes de anti-cheat](../tests/OneVOneTimer.Tests/AntiCheatTests.cs) do projeto listam cada função do Windows que o cronômetro usa e falham se algum dia for adicionada uma para ler a memória de outro programa, colocar código nele ou simular toques.
+
+Baixe o 1v1 Timer só pela [página de versões](https://github.com/yasirmz/1v1-Timer/releases): uma cópia de qualquer outro lugar pode ter sido alterada.
+
 ## Privacidade
 
 - Sem telemetria, sem análises, sem conta.

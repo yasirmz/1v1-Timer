@@ -71,6 +71,21 @@ Updates come from inside the app, when you press Update. Uninstalling keeps your
 - **Games run as administrator:** if a game runs as administrator, Windows may keep its keys from reaching a timer that does not. Start 1v1 Timer as administrator too, or use the controller, which works either way.
 - **Controllers:** Xbox, PlayStation (DualSense, DualShock 4) and most other controllers, with no extra app. On a PlayStation controller, Cross is A, Circle B, Square X and Triangle Y.
 
+## Anti-cheat (Vanguard, Easy Anti-Cheat, VAC)
+
+**Can 1v1 Timer get my Valorant, Fortnite or Steam account banned?**
+
+1v1 Timer does none of the things anti-cheat bans for. It is a program of its own with its own window, like Discord or OBS, and it never touches a game:
+
+- It never opens, reads or changes a game's memory, and never puts any code into a game.
+- It never presses a key, clicks or presses a controller button for you. It only listens to presses, as Windows lets any app, and the game still gets every one.
+- It installs no driver and needs no administrator rights.
+- It shows two stopwatches; it does nothing in the game for you.
+
+No anti-cheat lets an app sign itself up as safe, so nobody but Riot, Epic or Valve can speak for them. But a stopwatch that never touches the game is not what they look for. This is checked on every change: the project's [anti-cheat tests](tests/OneVOneTimer.Tests/AntiCheatTests.cs) list every Windows function the timer uses and fail if one for reading another program's memory, putting code into it or faking input is ever added.
+
+Download 1v1 Timer only from this page's [releases](https://github.com/yasirmz/1v1-Timer/releases): a copy from anywhere else could have been changed.
+
 ## Privacy
 
 - No telemetry, no analytics, no account.

@@ -71,6 +71,21 @@ Updates kommen aus der App selbst, wenn Sie auf Aktualisieren klicken. Beim Dein
 - **Spiele mit Administratorrechten:** Läuft ein Spiel als Administrator, lässt Windows seine Tasten eventuell nicht zu einem Timer durch, der ohne diese Rechte läuft. Starten Sie 1v1 Timer dann ebenfalls als Administrator, oder nutzen Sie den Controller, der in beiden Fällen funktioniert.
 - **Controller:** Xbox, PlayStation (DualSense, DualShock 4) und die meisten anderen Controller, ohne zusätzliche App. Bei einem PlayStation-Controller ist Kreuz A, Kreis B, Quadrat X und Dreieck Y.
 
+## Anti-Cheat (Vanguard, Easy Anti-Cheat, VAC)
+
+**Kann 1v1 Timer meinen Valorant-, Fortnite- oder Steam-Account sperren lassen?**
+
+1v1 Timer tut nichts von dem, wofür Anti-Cheat sperrt. Es ist ein eigenes Programm mit eigenem Fenster, wie Discord oder OBS, und berührt nie ein Spiel:
+
+- Es öffnet, liest oder ändert nie den Speicher eines Spiels und bringt nie Code in ein Spiel.
+- Es drückt nie eine Taste, klickt nie und drückt nie eine Controller-Taste für Sie. Es hört Tastendrücke nur mit, wie Windows es jeder App erlaubt, und das Spiel bekommt weiterhin jeden.
+- Es installiert keinen Treiber und braucht keine Administratorrechte.
+- Es zeigt zwei Stoppuhren und tut im Spiel nichts für Sie.
+
+Kein Anti-Cheat lässt eine App sich selbst als sicher anmelden, daher kann nur Riot, Epic oder Valve für sie sprechen. Aber eine Stoppuhr, die das Spiel nie berührt, ist nicht das, wonach sie suchen. Das wird bei jeder Änderung geprüft: Die [Anti-Cheat-Tests](../tests/OneVOneTimer.Tests/AntiCheatTests.cs) des Projekts listen jede Windows-Funktion auf, die der Timer nutzt, und schlagen fehl, sobald eine hinzukommt, die den Speicher eines anderen Programms liest, Code hineinbringt oder Eingaben vortäuscht.
+
+Laden Sie 1v1 Timer nur über die [Releases](https://github.com/yasirmz/1v1-Timer/releases) dieser Seite herunter: Eine Kopie von anderswo könnte verändert sein.
+
 ## Datenschutz
 
 - Keine Telemetrie, keine Analysen, kein Konto.

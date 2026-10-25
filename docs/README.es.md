@@ -71,6 +71,21 @@ Las actualizaciones llegan desde la propia aplicación, cuando pulsa Actualizar.
 - **Juegos ejecutados como administrador:** si un juego se ejecuta como administrador, Windows puede impedir que sus teclas lleguen a un cronómetro que no lo hace. Ejecute 1v1 Timer como administrador también, o use el mando, que funciona en ambos casos.
 - **Mandos:** Xbox, PlayStation (DualSense, DualShock 4) y la mayoría de los demás mandos, sin ninguna otra aplicación. En un mando de PlayStation, la X es A, el círculo B, el cuadrado X y el triángulo Y.
 
+## Antitrampas (Vanguard, Easy Anti-Cheat, VAC)
+
+**¿Puede 1v1 Timer hacer que baneen mi cuenta de Valorant, Fortnite o Steam?**
+
+1v1 Timer no hace nada de lo que el antitrampas castiga. Es un programa aparte con su propia ventana, como Discord u OBS, y nunca toca el juego:
+
+- Nunca abre, lee ni cambia la memoria de un juego, ni le mete código.
+- Nunca pulsa teclas, hace clic ni pulsa botones del mando por ti. Solo escucha las pulsaciones, como Windows permite a cualquier aplicación, y el juego sigue recibiendo cada una.
+- No instala ningún controlador (driver) ni necesita permisos de administrador.
+- Muestra dos cronómetros; no hace nada en el juego por ti.
+
+Ningún antitrampas deja que una aplicación se registre como segura, así que solo Riot, Epic o Valve pueden hablar por ellos. Pero un cronómetro que nunca toca el juego no es lo que buscan. Se comprueba en cada cambio: las [pruebas antitrampas](../tests/OneVOneTimer.Tests/AntiCheatTests.cs) del proyecto listan cada función de Windows que usa el temporizador y fallan si alguna vez se añade una para leer la memoria de otro programa, meterle código o falsificar pulsaciones.
+
+Descarga 1v1 Timer solo desde la [página de versiones](https://github.com/yasirmz/1v1-Timer/releases): una copia de cualquier otro sitio podría estar modificada.
+
 ## Privacidad
 
 - Sin telemetría, sin analíticas, sin cuenta.
